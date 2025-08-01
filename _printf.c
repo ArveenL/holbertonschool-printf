@@ -1,5 +1,12 @@
-#include <stdio.h> /* for putchar */
-#include <stdarg.h> /* for variadic functions */
+#include "main.h"
+#include <stdio.h>
+#include <stdarg.h>
+/**
+ *
+ *
+ *
+ *
+ */
 int _printf(const char *format, ...)
 {
 	va_list args;
@@ -15,34 +22,32 @@ int _printf(const char *format, ...)
 		if (format[i] == '%')
 		{
 			i++;
-
 			if (format[i] == '\0')
-			{
-				va_end(args);
 				return (-1);
-			}
-			else if (format[i] == 'c')
-				count += print_char(args);
-			else if (format[i] == 's')
-				count += print_string(args);
-		 	else if (format[i] == 'd' || format[i] == 'i')
-				count += print_number(args);
-			else if (format[i] == '%')
+
+			switch (format[i])
 			{
-				write(1, "%", 1);
-				count++;
-			}
-			else
-			{
-				write(1, "%", 1);
-				write(1, &format[i], 1);
-				count += 2;
+				case 'c':
+					count += print_char(args);
+					break;
+				case 's':
+					count += print_string(args);
+					break;
+				case 'd':
+				case 'i':
+					count += print_number(args);
+					break;
+				case '%':
+					count += _putchar('%');
+					break;
+				default:
+					count += _putchar('%');
+					count += _putchar(format[i]);
 			}
 		}
 		else
 		{
-			write(1, &format[i], 1);
-			count++;
+			count += _putchar(format[i]);
 		}
 		i++;
 	}
@@ -50,3 +55,4 @@ int _printf(const char *format, ...)
 	va_end(args);
 	return (count);
 }
+

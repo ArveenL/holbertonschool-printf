@@ -1,5 +1,4 @@
 #include <stdarg.h>
-#include <unistd.h>
 #include "main.h"
 
 /**
@@ -32,22 +31,22 @@ int print_number(int n)
 int _printf(const char *format, ...)
 {
 	va_list args;
-	int i = 0, len = 0, j, num;
+	int index = 0, len = 0, j, num;
 	char c, *str;
 
 	va_start(args, format);
-	while (format[i] != '\0')
+	while (format[index] != '\0')
 	{
-		if (format[i] == '%' && format[i + 1] != '\0')
+		if (format[index] == '%' && format[index + 1] != '\0')
 		{
-			i++;
-			if (format[i] == 'c')
+			index++;
+			if (format[index] == 'c')
 			{
 				c = va_arg(args, int);
 				_putchar(c);
 				len++;
 			}
-			else if (format[i] == 's')
+			else if (format[index] == 's')
 			{
 				str = va_arg(args, char *);
 				for (j = 0; str[j] != '\0'; j++)
@@ -56,12 +55,12 @@ int _printf(const char *format, ...)
 					len++;
 				}
 			}
-			else if (format[i] == '%')
+			else if (format[index] == '%')
 			{
 				_putchar('%');
 				len++;
 			}
-			else if (format[i] == 'd' || format[i] == 'i')
+			else if (format[index] == 'd' || format[index] == 'i')
 			{
 				num = va_arg(args, int);
 				len += print_number(num);
@@ -69,10 +68,10 @@ int _printf(const char *format, ...)
 		}
 		else
 		{
-			_putchar(format[i]);
+			_putchar(format[index]);
 			len++;
 		}
-		i++;
+		index++;
 	}
 	va_end(args);
 	return (len);

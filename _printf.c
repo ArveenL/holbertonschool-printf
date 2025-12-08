@@ -3,8 +3,25 @@
 #include "main.h"
 
 /**
+ * print_number - prints an integer
+ * @n: the integer to print
+ *
+ * Return: number of digits printed
+ */
+int print_number(int n)
+{
+	int count = 0;
+
+	if (n / 10)
+		count += print_number(n / 10);
+	_putchar((n % 10) + '0');
+	count++;
+	return (count);
+}
+
+/**
  * _printf - cust.printf that looks for either a normal string
- *           or a %c or a %s or a %%, all within first argument
+ *           or a %c or a %s or a %% or %d or %i, all within first argument
  * @format: the first argument in question, just a normal string,
  *          and may contain above identifiers
  * ...: takes more arguments to fill in any specifiers that may
@@ -12,21 +29,13 @@
  *
  * Return: count of length of first argument excluding '\0'
  */
-
 int _printf(const char *format, ...)
 {
 	va_list args;
-	int i = 0;
-	int len = 0;
-	char c;
-	char *str;
-	int j;
-
-	if (format == NULL)
-		return (-1);
+	int i = 0, len = 0, j, num;
+	char c, *str;
 
 	va_start(args, format);
-
 	while (format[i] != '\0')
 	{
 		if (format[i] == '%' && format[i + 1] != '\0')
@@ -41,8 +50,6 @@ int _printf(const char *format, ...)
 			else if (format[i] == 's')
 			{
 				str = va_arg(args, char *);
-				if (str == NULL)
-					str = "(null)";
 				for (j = 0; str[j] != '\0'; j++)
 				{
 					_putchar(str[j]);
@@ -54,6 +61,11 @@ int _printf(const char *format, ...)
 				_putchar('%');
 				len++;
 			}
+			else if (format[i] == 'd' || format[i] == 'i')
+			{
+				num = va_arg(args, int);
+				len += print_number(num);
+			}
 		}
 		else
 		{
@@ -62,7 +74,6 @@ int _printf(const char *format, ...)
 		}
 		i++;
 	}
-
 	va_end(args);
 	return (len);
 }
